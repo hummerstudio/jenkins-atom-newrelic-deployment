@@ -1,0 +1,132 @@
+{
+  "atomCode": "newrelic-deployment",
+  "name": "New Relic deployment marker",
+  "version": "1.0.0",
+  "description": "在 New Relic 记一条部署标记：默认走 NerdGraph changeTrackingCreateDeployment（entityGuid），也可切到旧的 /v2/applications/{id}/deployments.json（applicationId）；两种都只发一次 POST，鉴权是 X-Api-Key，回读出 deploymentId 才算成功。",
+  "execution": {
+    "packagePath": "newrelic-deployment.jar",
+    "language": "java",
+    "target": "$atom_java_path -cp newrelic-deployment.jar com.jenkinschina.atom.sdk.AtomRunner"
+  },
+  "input": {
+    "apiKey": {
+      "label": "New Relic User API Key（需要能写 change tracking；留空则用绑定的密钥）",
+      "type": "password",
+      "default": ""
+    },
+    "region": {
+      "label": "区域：us（api.newrelic.com）或 eu（api.eu.newrelic.com）",
+      "type": "vuex-input",
+      "default": "us"
+    },
+    "baseUrl": {
+      "label": "覆盖基址（留空＝按 region 用官方地址；自建代理/调试时填，如 http://127.0.0.1:8080）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "mode": {
+      "label": "形态：graphql（NerdGraph，按 entityGuid）或 v2（REST，按 applicationId）",
+      "type": "vuex-input",
+      "default": "graphql"
+    },
+    "entityGuid": {
+      "label": "Entity GUID（mode=graphql 必填）",
+      "type": "vuex-input",
+      "default": "MXxBUE18QVBQTElDQVRJT058MTIzNDU2Nzg5"
+    },
+    "applicationId": {
+      "label": "APM Application ID（mode=v2 必填，纯数字）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "version": {
+      "label": "版本 / revision（必填）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "commit": {
+      "label": "Commit SHA（可选）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "changelog": {
+      "label": "变更说明（可选，可多行）",
+      "type": "textarea",
+      "default": ""
+    },
+    "description": {
+      "label": "描述（可选）",
+      "type": "textarea",
+      "default": ""
+    },
+    "user": {
+      "label": "部署人（可选）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "groupId": {
+      "label": "Group ID（可选，NerdGraph 才有效）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "deploymentType": {
+      "label": "部署类型（可选，NerdGraph：BASIC / BLUE_GREEN / CANARY / ROLLING / SHADOW）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "deepLink": {
+      "label": "深链（可选，NerdGraph 才有效）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "timestampSeconds": {
+      "label": "时间戳（Unix 秒，留空＝当前时间）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "timeoutSeconds": {
+      "label": "连接与读取超时（秒）",
+      "type": "vuex-input",
+      "default": "60"
+    }
+  },
+  "output": {
+    "deploymentId": {
+      "type": "string",
+      "description": "New Relic 返回的部署标记 ID（graphql 与 v2 都有）"
+    },
+    "mode": {
+      "type": "string",
+      "description": "实际走的形态：graphql / v2"
+    },
+    "region": {
+      "type": "string",
+      "description": "实际用的区域：us / eu"
+    },
+    "endpoint": {
+      "type": "string",
+      "description": "实际 POST 的地址"
+    },
+    "httpCode": {
+      "type": "string",
+      "description": "New Relic 返回的状态码"
+    },
+    "version": {
+      "type": "string",
+      "description": "写进标记的版本"
+    },
+    "response": {
+      "type": "string",
+      "description": "响应体首段（已压平，最多 400 字符）"
+    }
+  },
+  "x-jenkins": {
+    "protocol": "jenkins-1",
+    "requires": {
+      "runner": ">=0.4.0"
+    },
+    "secrets": {
+      "apiKey": ""
+    }
+  }
+}

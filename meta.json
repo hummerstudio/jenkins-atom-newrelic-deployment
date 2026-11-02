@@ -1,0 +1,11 @@
+{
+  "name": "New Relic deployment marker",
+  "summary": "newrelic-deployment-notifier 移植：一次 POST 记部署标记，NerdGraph changeTrackingCreateDeployment（entityGuid）或 /v2/applications/{id}/deployments.json（applicationId），X-Api-Key 鉴权，回读 deploymentId 才算成功。",
+  "author": "hummerstudio",
+  "license": "MIT",
+  "tags": [
+    "official-port",
+    "newrelic-deployment-notifier"
+  ],
+  "homepage": "https://github.com/hummerstudio/jenkins-atom-newrelic-deployment"
+}
