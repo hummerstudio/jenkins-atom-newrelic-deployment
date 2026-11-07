@@ -37,4 +37,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: newrelic-deployment-atom
-          path: atom/dist/newrelic-deployment/
+          path: atom/target/dist/newrelic-deployment/
