@@ -62,13 +62,11 @@ Each one is asserted by `tools/check.py`.
 ## Build and check
 
 ```
-export JAVA_HOME=~/tools/jdk-21.0.12.1+1/Contents/Home
-./build.sh
-python3 tools/check.py      # fake New Relic, 72 assertions
+mvn verify                  # src/test/java/atom/NewRelicDeploymentIT.java, 20 cases
 python3 tools/mutations.py  # 15 deliberate breaks, all must be caught
 ```
 
-`tools/check.py` starts a real `ThreadingHTTPServer`, records method/path/headers/raw body, and rebuilds every
+The test starts a real HTTP server, records method/path/headers/raw body, and rebuilds every
 expectation from the case's inputs: the GraphQL document is re-derived *and* parsed back field by field, so escaping
 and order are both checked; the v2 body is compared as a JSON document; the numeric id is compared as a string; and
 `output.json` is read for status/errorCode/data. Failure paths (401/403, 404, 429 with `Retry-After`, 5xx, redirect,
